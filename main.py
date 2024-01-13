@@ -33,6 +33,8 @@ def initialMenu():
         if user.getLoggedIn():
             mainMenu(user, cart, inventory)
 
+    return user  
+
 def mainMenu(user, cart, inventory):
     while user.getLoggedIn():
         print("Main Menu:")
@@ -98,6 +100,8 @@ def cartMenu(cart, user, inventory):
 
 def main():
     print("Welcome to the online bookstore!\n")
-    initialMenu()
+    user = initialMenu()  # Get the user object returned by initialMenu
+    if user.getLoggedIn():
+        mainMenu(user, Cart(), Inventory(database_name="methods.db", table_name="Inventory"))
 
 main()
