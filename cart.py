@@ -1,8 +1,7 @@
 import sqlite3
 import sys
-from user import User
-
-
+from user import user
+from inventory import Inventory
 
 class Cart:
     def __init__(self, databaseName="methods.db"):
