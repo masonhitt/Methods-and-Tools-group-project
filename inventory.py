@@ -3,7 +3,7 @@ import sys
 
 class Inventory:
 
-    def __init__(self, database_name="inventory.db", table_name=None):
+    def __init__(self, database_name="methods.db", table_name=None):
         self.database_name = database_name
         self.table_name = table_name
 
@@ -18,9 +18,7 @@ class Inventory:
         self.database_name = database_name
 
     def view_inventory(self):
-        if not self.database_name or not self.table_name:
-            print("Database name or table name not provided.")
-            return
+        
 
         try:
             self.cursor.execute(f"SELECT * FROM {self.table_name}")
