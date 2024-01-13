@@ -1,17 +1,13 @@
-from user import *
-from cart import *
-from inventory import *
+from user import User
+from cart import Cart
+from inventory import Inventory
 
-
-## COMPLETE initial pre-login menu
 def initialMenu():
-    ## objects for the classes
     user = User()
     cart = Cart()
-    inventory = Inventory()
+    inventory = Inventory(database_name="methods.db", table_name="Inventory")
 
-    ## initial menu
-    while(1):
+    while True:
         print("Pre-Login Menu:")
         print("0. Login")
         print("1. Create Account")
@@ -19,32 +15,26 @@ def initialMenu():
         initial = input("Enter your menu choice: ")
         print()
 
-        if(initial == "0"):
+        if initial == "0":
             user.login()
 
-        elif(initial == "1"):
+        elif initial == "1":
             user.createAccount()
 
-        ## exit program
-        elif(initial == "2"):
+        elif initial == "2":
             print("Good-bye!")
             break
 
-        ## incorrect menu option
         else:
             print("That's not a menu option. Please try again.")
 
         print()
 
-        ## checks status after one menu loop...
-        ## goes into main menu if applicable
-        if(user.getLoggedIn()):
+        if user.getLoggedIn():
             mainMenu(user, cart, inventory)
 
-
-## incomplete main menu...
 def mainMenu(user, cart, inventory):
-    while(user.getLoggedIn()):
+    while user.getLoggedIn():
         print("Main Menu:")
         print("0. Logout")
         print("1. View Account Information")
@@ -53,13 +43,20 @@ def mainMenu(user, cart, inventory):
         option = input("Enter your menu choice: ")
         print()
 
-        ## logging out
-        if(option == "0"):
+        if option == "0":
             user.logout()
-
             print("Successful logout.")
 
-        ## incorrect menu option
+        elif option == "1":
+            user.viewAccountInformation()
+
+        elif option == "2":
+            inventory.set_database("methods.db")
+            inventory.view_inventory()
+
+        elif option == "3":
+            cartMenu(cart, user, inventory)
+
         else:
             print("That's not a menu option. Please try again.")
 
@@ -99,12 +96,8 @@ def cartMenu(cart, user, inventory):
             print("That's not a menu option. Please try again.")
         print()
 
-
 def main():
     print("Welcome to the online bookstore!\n")
-
-    
-
     initialMenu()
 
 main()
