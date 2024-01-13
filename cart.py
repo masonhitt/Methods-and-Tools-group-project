@@ -1,26 +1,25 @@
+import sqlite3
+import sys
+from user import User
+
+
+
 class Cart:
-
-    try:
-            connection = sqlite3.connect(self.databaseName)
-
-        except:
-            print("Failed database connection.")
-
-            ## exits the program if unsuccessful
-            sys.exit()
-
-        ## cursor to send queries through
-        cursor = connection.cursor()
-
-
     def __init__(self, databaseName="methods.db"):
         self.databaseName = databaseName
+
+        try:
+            self.connection = sqlite3.connect(self.databaseName)
+            self.cursor = self.connection.cursor()
+        except:
+            print("Failed database connection.")
+            sys.exit()
 
     def viewCart(self, userID, inventoryDatabase):
         user = User(self.databaseName)
         if user.getLoggedIn():
             inventory = Inventory(inventoryDatabase)
-            inventory.viewInventory()
+            inventory.view_inventory()
         else:
             print("User is not logged in.")
 
@@ -28,9 +27,8 @@ class Cart:
         user = User(self.databaseName)
         if user.getLoggedIn():
             inventory = Inventory(self.databaseName)
-            inventory.decreaseStock(ISBN, quantity)
+            inventory.decrease_stock(ISBN, quantity)
             current_userID = user.getUserID()
-            
         else:
             print("User is not logged in.")
 
@@ -45,8 +43,6 @@ class Cart:
     def checkOut(self, userID):
         user = User(self.databaseName)
         if user.getLoggedIn():
-            
             current_userID = user.getUserID()
         else:
             print("User is not logged in.")
-
