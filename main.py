@@ -1,10 +1,11 @@
+import sys
 from user import User
 from cart import Cart
 from inventory import Inventory
 
 def initialMenu():
     user = User()
-    cart = Cart()
+    cart = Cart(databaseName="methods.db")
     inventory = Inventory(database_name="methods.db", table_name="Inventory")
 
     while True:
@@ -79,12 +80,14 @@ def cartMenu(cart, user, inventory):
             break
 
         elif option == "1":
-            cart.viewCart(user.getUserID(), inventory.getDatabaseName())
+            cart.viewCart()
+
 
         elif option == "2":
             ISBN = input("Enter ISBN of the book to add: ")
             quantity = int(input("Enter quantity (default is 1): ") or 1)
-            cart.addToCart(user.getUserID(), ISBN, quantity)
+            cart.addToCart(user, ISBN, quantity)
+
 
         elif option == "3":
             ISBN = input("Enter ISBN of the book to remove: ")
@@ -101,7 +104,10 @@ def cartMenu(cart, user, inventory):
 def main():
     print("Welcome to the online bookstore!\n")
     user = initialMenu()  # Get the user object returned by initialMenu
+    inventory = Inventory(database_name="methods.db", table_name="Inventory")
     if user.getLoggedIn():
-        mainMenu(user, Cart(), Inventory(database_name="methods.db", table_name="Inventory"))
+        mainMenu(user, Cart(), inventory)
+    
+    inventory.close_connection()    
 
 main()
