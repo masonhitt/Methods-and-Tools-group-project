@@ -18,7 +18,9 @@ class Inventory:
         self.database_name = database_name
 
     def view_inventory(self):
-        
+        if not self.database_name or not self.table_name:
+            print("Database name or table name not provided.")
+            return
 
         try:
             self.cursor.execute(f"SELECT * FROM {self.table_name}")
@@ -32,10 +34,17 @@ class Inventory:
 
         except sqlite3.Error as e:
             print(f"Error viewing inventory: {e}")
+    
+    def open_connection(self):
+        print("Opening database connection.")
+        self.connection = sqlite3.connect(self.database_name)
+        self.cursor = self.connection.cursor()
 
-        finally:
-            if self.connection:
-                self.connection.close()
+    def close_connection(self):
+        if self.connection:
+            print("Closing database connection.")
+            self.connection.close()
+     
 
     def search_inventory(self, title):
         if not self.database_name or not self.table_name:
