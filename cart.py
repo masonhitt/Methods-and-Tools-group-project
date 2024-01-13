@@ -16,25 +16,28 @@ class Cart:
 
     def viewCart(self, userID, inventoryDatabase):
         user = User(self.databaseName)
-        if user.getLoggedIn():
-            inventory = Inventory(inventoryDatabase)
-            inventory.view_inventory()
+        if user_instance.getLoggedIn():
+            inventory_instance = Inventory()
+            inventory_instance.set_database(inventoryDatabase)
+            inventory_instance.view_inventory()
         else:
             print("User is not logged in.")
 
     def addToCart(self, userID, ISBN, quantity=1):
         user = User(self.databaseName)
-        if user.getLoggedIn():
-            inventory = Inventory(self.databaseName)
-            inventory.decrease_stock(ISBN, quantity)
-            current_userID = user.getUserID()
+        if user_instance.getLoggedIn():
+            inventory_instance = Inventory()
+            inventory_instance.set_database(self.databaseName)
+            inventory_instance.decrease_stock(ISBN, quantity)
+            current_userID = user_instance.getUserID()
         else:
             print("User is not logged in.")
 
     def removeFromCart(self, userID, ISBN):
         user = User(self.databaseName)
         if user.getLoggedIn():
-            #
+            inventory = Inventory(self.databaseName)
+            inventory.increase_stock(ISBN, quantity)
             current_userID = user.getUserID()
         else:
             print("User is not logged in.")
