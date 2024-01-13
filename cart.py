@@ -1,50 +1,45 @@
 import sqlite3
 import sys
-from user import user
+from user import User
 from inventory import Inventory
 
 class Cart:
     def __init__(self, databaseName="methods.db"):
         self.databaseName = databaseName
+        self.user = None
+        self.inventory = Inventory(database_name=databaseName, table_name="Inventory")
 
         try:
             self.connection = sqlite3.connect(self.databaseName)
             self.cursor = self.connection.cursor()
-        except:
-            print("Failed database connection.")
+        except sqlite3.Error as e:
+            print(f"Failed database connection: {e}")
             sys.exit()
 
-    def viewCart(self, userID, inventoryDatabase):
-        user = User(self.databaseName)
-        if user_instance.getLoggedIn():
-            inventory_instance = Inventory()
-            inventory_instance.set_database(inventoryDatabase)
-            inventory_instance.view_inventory()
+    def viewCart(self):
+        if self.user and self.user.getLoggedIn():
+            self.inventory.open_connection()
+            self.inventory.view_inventory()
+            self.inventory.close_connection()
         else:
             print("User is not logged in.")
 
-    def addToCart(self, userID, ISBN, quantity=1):
-        user = User(self.databaseName)
-        if user_instance.getLoggedIn():
-            inventory_instance = Inventory()
-            inventory_instance.set_database(self.databaseName)
-            inventory_instance.decrease_stock(ISBN, quantity)
-            current_userID = user_instance.getUserID()
+    def addToCart(self, user, ISBN, quantity=1):
+        if user.getLoggedIn():
+            inventory = Inventory(database_name="methods.db", table_name="Inventory") 
+            inventory.decrease_stock(ISBN, quantity)
+            current_userID = user.getUserID()
         else:
-            print("User is not logged in.")
+             print("User is not logged in.")
 
     def removeFromCart(self, userID, ISBN):
-        user = User(self.databaseName)
-        if user.getLoggedIn():
-            inventory = Inventory(self.databaseName)
-            inventory.increase_stock(ISBN, quantity)
-            current_userID = user.getUserID()
+        if self.user and self.user.getLoggedIn():
+            current_userID = self.user.getUserID()
         else:
             print("User is not logged in.")
 
     def checkOut(self, userID):
-        user = User(self.databaseName)
-        if user.getLoggedIn():
-            current_userID = user.getUserID()
+        if self.user and self.user.getLoggedIn():
+            current_userID = self.user.getUserID()
         else:
             print("User is not logged in.")
